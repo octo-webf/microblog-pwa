@@ -1,0 +1,14 @@
+.message-item {
+  padding: 10px;
+  line-height: 18px;
+  color: #292f33;
+}
+
+.message-item__author {
+  display: block;
+  font-weight: 600;
+}
+
+.message-item__content {
+  display: block;
+}

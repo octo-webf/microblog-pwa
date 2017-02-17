@@ -1,0 +1,18 @@
+<div class="messages">
+
+  <h2> {{ $t('message.welcome') }} {{ pseudo }}</h2>
+  <div class="message-input">
+    <input v-model="newMessage" type="text" :placeholder='$t("message.whatsNew")' autofocus="" class="message-input__content" @keyup.enter="postNewMessages">
+  </div>
+
+  <div class="message-list">
+    <ul class="message-list__ul">
+      <li v-for="message in messages" class="message-list__li">
+        <div class="message-item">
+          <span class="message-item__author">{{message.author}}</span>
+          <span class="message-item__content">{{message.content}}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

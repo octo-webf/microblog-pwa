@@ -1,0 +1,7 @@
+.DS_Store
+.idea/
+dist/*
+!dist/server.js
+node_modules/
+npm-debug.log
+test/unit/coverage

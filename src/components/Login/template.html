@@ -1,0 +1,5 @@
+<div id="login">
+  <h1>{{ $t('login.title') }}</h1>
+
+  <input v-model="newPseudo" type="text" :placeholder='$t("login.placeholder")' @keyup.enter="login">
+</div>

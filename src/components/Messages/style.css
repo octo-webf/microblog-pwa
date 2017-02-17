@@ -1,0 +1,8 @@
+@import "stylesheets/message-item.css";
+@import "stylesheets/message-input.css";
+@import "stylesheets/message-list.css";
+
+.messages {
+  width: 600px;
+}
+
