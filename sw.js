@@ -27,13 +27,23 @@ self.addEventListener('install', (event) => {
 
 // Sera déclenché à chaque appel réseau de l'application
 self.addEventListener('fetch', (event) => {
-  console.log('appel : ', event.request.url);
-
-  // On regarde si on a, dans le cache, une entrée qui correspond à notre requête
-  event.respondWith(
-    caches.match(event.request).then((responseCache) => {
-      // Si on a une entrée, on renvoit l'entrée de cache, sinon on effectue l'appel réseau
-      return responseCache || fetch(event.request);
-    })
-  );
+  const messagesApiUrl = 'https://microblog-api.herokuapp.com/api/messages';
+  if (event.request.url.indexOf(messagesApiUrl) > -1 && event.request.method === 'GET') {
+    event.respondWith(
+      caches.open('messages').then((cache) => {
+        return fetch(event.request).then((response) => {
+          cache.put(event.request.url, response.clone());
+          return response;
+        });
+      })
+    );
+  } else {
+    // On regarde si on a, dans le cache, une entrée qui correspond à notre requête
+    event.respondWith(
+      caches.match(event.request).then((responseCache) => {
+        // Si on a une entrée, on renvoit l'entrée de cache, sinon on effectue l'appel réseau
+        return responseCache || fetch(event.request);
+      })
+    );
+  }
 });
