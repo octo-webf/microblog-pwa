@@ -1,1 +1,26 @@
-{} 
+{
+  "name": "Micro-blog - PWA",
+  "short_name": "mb-pwa",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#4cc1fc",
+  "theme_color": "#222222",
+  "icons": [
+    {
+      "src": "/static/img/app_icon/app_icon_96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/img/app_icon/app_icon_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/img/app_icon/app_icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
