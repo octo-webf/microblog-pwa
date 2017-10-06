@@ -2,6 +2,7 @@
 
 <script>
   import Auth from '../../services/Auth';
+  import IndexDB from '../../services/IndexDB';
 
   export default {
     name: 'message',
@@ -22,11 +23,17 @@
     methods: {
       getAllMessages() {
         if ('caches' in window) {
+          //Récupérer les messages dans le cache
           caches.match(this.apiURL).then((response) => {
             if (response) {
               response.json().then((data) => {
                 console.log('Messages depuis le cache');
-                this.messages = data.reverse();
+
+                //Récupérer les messages ajouté en offline et les ajouté à la liste des messages visibles
+                IndexDB.getAllOfflineMessages((allOfflineMessages) => {
+                  data = data.concat(allOfflineMessages);
+                  this.messages = data.reverse();
+                });
               });
             }
           });
@@ -48,9 +55,21 @@
             content: newValue,
           };
 
-          this.$http.post(this.apiURL, params).then(() => {
-            this.getAllMessages();
-            this.newMessage = '';
+          this.$http.post(this.apiURL, params)
+            .then(() => {
+              this.getAllMessages();
+              this.newMessage = '';
+            })
+            .catch(() => {
+              IndexDB.saveMessageOffline(this.pseudo, newValue);
+
+              navigator.serviceWorker.ready.then((swRegistration) => {
+                console.log("register offline message sync")
+                return swRegistration.sync.register('offlineMessage');
+              });
+
+              this.getAllMessages();
+              this.newMessage = '';
           });
         }
       },

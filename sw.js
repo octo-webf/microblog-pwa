@@ -1,3 +1,5 @@
+self.importScripts('./indexDBService.js');
+
 // Sera déclenché quand le service worker sera installé
 self.addEventListener('install', (event) => {
   console.log('Le service worker est installé');
@@ -48,7 +50,6 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
-
 /*
   Push notifications
  */
@@ -60,9 +61,9 @@ self.addEventListener('push', (event) => {
   // Configuration de la notification
   const title = 'Progressive Web App';
   const options = {
-    body: 'Wizz.',
-    icon: '/static/img/app_icon/app_icon_96.png',
-    badge: '/static/img/app_icon/app_icon_96.png',
+    body : 'Wizz.',
+    icon : '/static/img/app_icon/app_icon_96.png',
+    badge : '/static/img/app_icon/app_icon_96.png',
   };
 
   // Envoi de la notification à l'utilisateur
@@ -71,3 +72,29 @@ self.addEventListener('push', (event) => {
   );
 });
 
+//à la réception d'un évènement de synchronisation
+self.addEventListener('sync', function (event) {
+  if (event.tag === 'offlineMessage') {
+    event.waitUntil(
+      //Récupérer tous les messages non synchronisés
+      self.getAllOfflineMessages((messages) => {
+        const fetchMessages = messages.map((message) => {
+          const messageBody = {
+            author : message.author,
+            content : message.content
+          };
+          //Refaire un post serveur pour chaque message
+          fetch("https://microblog-api.herokuapp.com/api/messages", {
+            method : "post",
+            body : JSON.stringify(messageBody),
+            headers : {'Content-Type' : 'application/json'}
+          })
+        })
+
+        //Quand tous les post seront terminés, nettoyer notre base de messages offline
+        Promise.all(fetchMessages)
+          .then(self.clearOfflineMessages)
+      })
+    );
+  }
+});
