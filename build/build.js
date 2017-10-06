@@ -20,6 +20,7 @@ shell.mkdir('-p', assetsPath)
 shell.config.silent = true
 shell.cp('-R', 'static/*', assetsPath)
 shell.cp('sw.js', config.build.assetsRoot)
+shell.cp('userRegistration.js', config.build.assetsRoot)
 shell.config.silent = false
 
 webpack(webpackConfig, function (err, stats) {
