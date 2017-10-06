@@ -28,6 +28,16 @@ export default {
     objStore.createIndex('content', 'content', {unique: false});
   },
 
+  clearOfflineMessages() {
+    var request = this.getDBRequestObject();
+
+    request.onsuccess = (event) => {
+      var store = this.getStoreObject(event.target.result);
+
+      store.clear();
+    }
+  },
+
   saveMessageOffline(author, content) {
     var request = this.getDBRequestObject();
 
