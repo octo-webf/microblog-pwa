@@ -1,28 +1,13 @@
-# microblog-vuejs2
-
-> a microblog with vueJS 2.0
-
 ## Build Setup
 
-``` bash
-# install dependencies
+# 1/ install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+# 2/ launch server in background
+npm start &
 
-# build for production with minification
+# 3/ build application each time to apply changements
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
+...
 
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
-```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-# microblog-vuejs2
