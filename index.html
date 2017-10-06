@@ -12,19 +12,54 @@
       <p>Veuillez l’activer afin d’avoir une bonne expérience avec l’application</p>
     </noscript>
     <title>microblog-vuejs2</title>
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
-  <script src="userRegistration.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      // On enregistre le service worker
-      navigator.serviceWorker.register('./sw.js').then((swRegistration) => {
-        console.log('Le service worker est enregistré !');
-      }).catch((err) => {
-        console.log('L\'enregistrement du service worker a échoué : ', err);
+</head>
+<body>
+<div id="app"></div>
+
+<script src="userRegistration.js"></script>
+<script>
+  function subscribeUser(swRegistration) {
+    // La clé publique pour communiquer avec le push codelab
+    const applicationServerPublicKey = 'BAhZ-4qylL5c4sseOLwbUqGbCMDeCTCBWgVpSKfP3tgyJI31H0m1CiIAW11cunmeWH4lgwa9M2iSOPU1rr2V1K8';
+    // Le standard demande d'envoyer la clé server en Uint8Array
+    const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+
+    // On demande l'autorisation de l'utilisateur pour envoyer des push notifications
+    swRegistration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey,
+    }).then((subscription) => {
+      console.log('L\'utilisateur vient de s\'inscrire');
+      // Afin de récupérer les clés d'inscription des utilisateurs on les affiche comme des messages
+      saveUserToken(subscription);
+    }).catch((err) => {
+      // L'utilisateur a refusé ou une autre erreur s'est produite
+      console.log('L\'inscription de l\'utilisateur a échoué', err);
+    });
+  }
+
+  if ('serviceWorker' in navigator) {
+    // On enregistre le service worker
+    navigator.serviceWorker.register('./sw.js').then((swRegistration) => {
+      console.log('Le service worker est enregistré !');
+      console.log(swRegistration);
+
+      // On récupère les infos d'autorisation des notifications de l'utilisateur
+      swRegistration.pushManager.getSubscription().then((subscription) => {
+        if (subscription) {
+          // Si on a un objet subscription alors l'utilisateur a déjà accepté/refusé les notifs
+          console.log('L\'utilisateur est inscrit aux notifications');
+        } else {
+          console.log('L\'utilisateur n\'est pas inscrit aux notifications');
+          // On envoie une invitation à l'utilisateur pour accepter (ou refuser) les notifs
+          subscribeUser(swRegistration);
+        }
       });
-    }
-  </script>
+    }).catch((err) => {
+      console.log('L\'enregistrement du service worker a échoué : ', err);
+    });
+  }
+
+</script>
+</body>
 </html>
