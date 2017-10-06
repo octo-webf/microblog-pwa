@@ -17,4 +17,14 @@
     <div id="app"></div>
   </body>
   <script src="userRegistration.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      // On enregistre le service worker
+      navigator.serviceWorker.register('./sw.js').then((swRegistration) => {
+        console.log('Le service worker est enregistré !');
+      }).catch((err) => {
+        console.log('L\'enregistrement du service worker a échoué : ', err);
+      });
+    }
+  </script>
 </html>
