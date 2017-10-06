@@ -21,10 +21,24 @@
 
     methods: {
       getAllMessages() {
-        this.$http.get(this.apiURL).then((response) => {
-          this.messages = response.body.reverse();
-        });
+        if ('caches' in window) {
+          caches.match(this.apiURL).then((response) => {
+            if (response) {
+              response.json().then((data) => {
+                console.log('Messages depuis le cache');
+                this.messages = data.reverse();
+              });
+            }
+          });
+        }
+        fetch(this.apiURL)
+          .then(response => response.json())
+          .then((data) => {
+            this.messages = data.reverse();
+          })
+          .catch(console.error);
       },
+
       postNewMessages() {
         const newValue = this.newMessage && this.newMessage.trim();
 
