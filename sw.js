@@ -61,7 +61,7 @@ self.addEventListener('push', (event) => {
   // Configuration de la notification
   const title = 'Progressive Web App';
   const options = {
-    body : 'Wizz.',
+    body : event.data.text(),
     icon : '/static/img/app_icon/app_icon_96.png',
     badge : '/static/img/app_icon/app_icon_96.png',
   };
