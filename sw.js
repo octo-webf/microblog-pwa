@@ -47,3 +47,27 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
+
+/*
+  Push notifications
+ */
+
+// Sera déclenché quand le SW recevra un évènement push depuis l'extérieur
+self.addEventListener('push', (event) => {
+  console.log(`Evènement push reçu avec le texte : "${event.data.text()}"`);
+
+  // Configuration de la notification
+  const title = 'Progressive Web App';
+  const options = {
+    body: event.data.text(),
+    icon: '/static/img/app_icon/app_icon_96.png',
+    badge: '/static/img/app_icon/app_icon_96.png',
+  };
+
+  // Envoi de la notification à l'utilisateur
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
+});
+
